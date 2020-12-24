@@ -23,48 +23,29 @@ class HtmlMenu extends BtnMenu {
     tryChangeActive() {
     	if (this.editor.isHtml) {
     		this.active()
-		} else {
-			this.unActive()
-		}
+	} else {
+		this.unActive()
+	}
     }
 }
+// 创建富文本编辑器
 function createEditor(ele) {
 	const editor = new E(ele)
-	editor.config.height = 400
-	editor.config.placeholder = '请输入正文'
-	editor.config.focus = false
-	editor.config.customAlert = function (s, t) {
-		switch (t) {
-		    case 'success':
-		      	$.modal.msgSuccess(s)
-		      	break
-		    case 'info':
-		    	$.modal.msgSuccess(s)
-		      	break
-		    case 'warning':
-		      	$.modal.alertWarning(s)
-		      	break
-		    case 'error':
-		      	$.modal.alertError(s)
-		      	break
-		    default:
-		    	$.modal.msgSuccess(s)
-		      	break
-		  }
-	}
-	editor.isHtml = false
+	editor.config.height = 400                                    // 设置高度
+	editor.config.focus = false                                   // 不获得焦点
+	editor.isHtml = false                                         // 默认不激活源码模式
 	editor.menus.extend('htmlMenu', HtmlMenu)
-	editor.config.menus = editor.config.menus.concat('htmlMenu')
-	editor.config.pasteFilterStyle = false                // 关闭粘贴过滤
-	editor.config.uploadImgServer = '/wangEditor/upload'  // 图片上传路径
-	editor.config.uploadFileName = 'file'                 // 图片上传名称
-	editor.config.uploadImgMaxSize = 50 * 1024 * 1024     // 图片大小限制50M
-	editor.config.uploadImgTimeout = 60 * 1000            // 图片上传超时60s
+	editor.config.menus = editor.config.menus.concat('htmlMenu')  // 添加源码模式菜单
+	editor.config.pasteFilterStyle = false                        // 关闭粘贴过滤
+	editor.config.uploadImgServer = '/wangEditor/upload'          // 图片上传路径
+	editor.config.uploadFileName = 'file'                         // 图片上传名称
+	editor.config.uploadImgMaxSize = 50 * 1024 * 1024             // 图片大小限制50M
+	editor.config.uploadImgTimeout = 60 * 1000                    // 图片上传超时60s
 	editor.create()
 	return editor
 }
-
-function getContent(editor) {
+// 获取富文本内容
+function getEditorContent(editor) {
 	if (editor.isHtml) {
 		return editor.txt.text().replace(/&lt;/ig, "<").replace(/&gt;/ig, ">").replace(/&nbsp;/ig, " ")
 	} else {
